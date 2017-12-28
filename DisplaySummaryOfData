@@ -1,0 +1,40 @@
+import java.util.ArrayList;
+
+public class DisplaySummaryOfData {
+	
+	/**
+	 * Displays a statement to the console.
+	 */
+	public void displayExecutingInstructions(){
+		StringBuilder str = new StringBuilder();
+		
+		str.append("\n===================================================\n");
+		str.append("          Executing instructions	\n");
+		str.append("===================================================\n");
+		System.out.print(str);
+	}
+	
+	/**
+	 * Displays the data from the array list to print a 
+	 * summary of the objects after executing instructions 
+	 * from the text file.
+	 * 
+	 * @param getData the array list containing the data
+	 */
+	public void summaryOfData(BinaryReader getData){
+		
+		ArrayList<Identifiable> data = getData.getArrayList();
+		StringBuilder str = new StringBuilder();
+		
+		str.append("\n===================================================\n");
+		str.append("  Summary of data after running instructions	\n");
+		str.append("===================================================\n");
+		System.out.print(str);
+		
+		//traverses array list to display the summary of each object
+		for(int index = 0; index < data.size(); index++){
+			data.get(index).printSummary();
+		}
+	}
+
+}
