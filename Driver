@@ -1,0 +1,17 @@
+public class Driver {
+
+	public static void main(String[] args){
+		
+		
+		BinaryReader binRead = new BinaryReader();
+		TextReader textRead = new TextReader();
+		DisplaySummaryOfData displayData = new DisplaySummaryOfData();
+		
+		displayData.displayExecutingInstructions();
+		binRead.readBinaryFile();
+		textRead.readTextFile(binRead);
+		displayData.summaryOfData(binRead);
+		
+	}//end main
+	
+}
