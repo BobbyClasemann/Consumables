@@ -1,0 +1,78 @@
+import java.io.DataInputStream;
+import java.io.EOFException;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+
+public class BinaryReader {
+
+	private ArrayList<Identifiable> loadData = new ArrayList<Identifiable>();
+	
+	public ArrayList<Identifiable> getArrayList(){
+		return loadData;
+	}
+	
+	/**
+	 * Reads from a binary file and stores the data given into an 
+	 * array list of Identifiables. 
+	 * If the file is done being read, throws an end of file exception
+	 * and closes the file.
+	 */
+	public void readBinaryFile(){
+		
+	boolean endOfFile = false;
+	FileInputStream fstream = null;
+	DataInputStream inputFile = null;
+	char code;
+	
+	try {
+		
+		fstream = new FileInputStream("tests1.dat");
+		inputFile = new DataInputStream(fstream);
+	
+		while(!endOfFile){
+			Luggage luggage = new Luggage();
+			Pizza pizza = new Pizza();
+			Battery battery = new Battery();
+			code = inputFile.readChar();
+
+			if(code == 'P'){
+				pizza.setId(inputFile.readInt());
+				pizza.setDiameter(inputFile.readInt());
+				pizza.setFlavor(inputFile.readUTF());
+				loadData.add(pizza);
+			}//end if
+			else if(code == 'B'){
+				battery.setId(inputFile.readInt());
+				battery.setCapacity(inputFile.readInt());
+				loadData.add(battery);
+			}//end else if
+			else if(code == 'L'){
+				luggage.setId(inputFile.readInt());
+				luggage.setColor(inputFile.readUTF());
+				loadData.add(luggage);
+			}//end else if
+			
+	}//end while
+	
+		
+	}catch(EOFException eofe){
+		endOfFile = true; 	//end of file is true when exception is thrown
+	}catch(IOException ioe){
+		System.out.println(ioe.getMessage());
+		System.exit(1125);
+	}finally{
+		if(inputFile != null){ 	
+			try{
+				inputFile.close();
+			}catch(IOException ioe){
+				System.out.println(ioe.getMessage());
+				System.exit(1125);
+			}//end catch
+			
+		}//end if
+	
+	}	
+}
+	
+}
