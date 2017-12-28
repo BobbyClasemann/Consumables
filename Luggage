@@ -1,0 +1,39 @@
+public class Luggage implements Identifiable {
+	
+	private int id;
+	private String color;
+	
+	public void setColor(String color){
+		this.color = color;
+	}
+	
+	private String color(){
+		return color;
+	}
+
+	@Override
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id){
+		this.id = id;
+	}
+
+	/**
+	 * Displays information about the Luggage after the
+	 * instructions finished executing to the console.
+	 */
+	@Override
+	public void printSummary() {
+		StringBuilder str = new StringBuilder();
+		str.append("Luggage: ");
+		str.append("id=");
+		str.append(id);
+		str.append(", ");
+		str.append("color=");
+		str.append(color);
+		System.out.println(str);
+	}
+
+}
