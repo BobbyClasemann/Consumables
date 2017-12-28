@@ -1,0 +1,89 @@
+public class Battery implements Consumable, Identifiable {
+	
+	private int id;
+	private int capacity;
+	private String units = "mAH";
+	private int batteryRemaining;
+	private double percentBatteryLeft;
+	
+	public int getCapacity(){
+		return capacity;
+	}
+	
+	public void setCapacity(int capacity){
+		
+		if(capacity > 3000)
+			capacity = 3000;
+		
+		this.capacity = capacity;
+	}
+	
+	/**
+	 * Calculates and returns the percentage of battery left
+	 * @return the percentage of battery left
+	 */
+	public double getPercentBatteryLeft(){
+		
+		double capacityToDouble = (double) batteryRemaining;
+		percentBatteryLeft = (capacityToDouble / 3000) * 100;
+		return percentBatteryLeft;
+	}
+
+	/**
+	 * Consumes the battery and checks if too much was consumed.
+	 * If too much is consumed, an OverConsumedException is thrown.
+	 */
+	@Override
+	public int consume(int amount) throws OverConsumedException{
+		batteryRemaining = capacity - amount;
+		capacity = batteryRemaining;	//update capacity
+		
+		if(batteryRemaining < 0){	//no battery left?
+			capacity = 0;
+			batteryRemaining = 0;	//yes set to 0
+			throw new OverConsumedException(batteryRemaining);//throw exception
+		}
+		
+		return batteryRemaining;
+	}
+
+	@Override
+	public int getRemainingCapacity() {
+		return batteryRemaining;
+	}
+
+	@Override
+	public String getRemainingCapacityUnits() {
+		String remainingCapacityUnits = batteryRemaining + " " + units;
+		return remainingCapacityUnits;
+	}
+
+	@Override
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id){
+		this.id = id;
+	}
+	
+	/**
+	 * Displays information about the battery after the
+	 * instructions finished executing to the console.
+	 */
+	@Override
+	public void printSummary() {
+		StringBuilder str = new StringBuilder();
+		str.append("Battery: ");
+		str.append("id=");
+		str.append(id);
+		str.append(", ");
+		str.append("% left=");
+		getPercentBatteryLeft(); 
+		str.append(percentBatteryLeft);
+		System.out.println(str);
+		
+		
+	}
+
+}
