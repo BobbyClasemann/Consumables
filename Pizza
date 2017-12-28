@@ -1,0 +1,114 @@
+public class Pizza implements Identifiable, Consumable {
+
+	private int diameter;
+	private double radius = diameter/2;
+	private int id;
+	private int capacity = 8;
+	private String units = "slices";
+	private int slicesRemaining;
+	private double remainingSurfaceArea;
+	private String flavor;
+
+	
+	public void setCapacity(int capacity){
+		this.capacity = capacity;
+	}
+	
+	private int diameter(){
+		return diameter;
+	}
+	
+	public void setDiameter(int diameter){
+		this.diameter = diameter;
+	}
+	
+	public void setFlavor(String flavor){
+		this.flavor = flavor;
+	}
+	
+	private String flavor(){
+		return flavor;
+	}
+	
+	/**
+	 * Calculates the surface area remaining in Pizza 
+	 * after executing the instructions from the file.
+	 * 
+	 * @return the surface area remaining on the Pizza object
+	 */
+	public double getRemainingSurfaceArea(){
+		//preventing integer division.
+		double capacityToDouble = (double) capacity; 
+		
+		//pi*r^2 is multiplied by the slices remaining over 
+		//the amount of slices possible.
+		remainingSurfaceArea =  Math.pow((Math.PI * radius), 2) * 
+								slicesRemaining / capacityToDouble; 
+		return remainingSurfaceArea;
+	}
+
+	/**
+	 * Consumes the pizza and checks if too much was consumed.
+	 * If too much is consumed, an OverConsumedException is thrown.
+	 */
+	@Override
+	public int consume(int amount) throws OverConsumedException {
+
+		slicesRemaining = capacity - amount;
+		capacity = slicesRemaining;	//update capacity
+	
+		
+		if(slicesRemaining < 0){	//no pizza left?
+			capacity = 0;
+			slicesRemaining = 0;	//yes set to 0
+		//yes throw an exception
+		throw new OverConsumedException(slicesRemaining);
+		}
+		
+		return slicesRemaining;
+	}
+
+	@Override
+	public int getRemainingCapacity() {
+		return slicesRemaining;
+	}
+
+	@Override
+	public String getRemainingCapacityUnits() {
+		String remainingCapacityUnits = slicesRemaining + " " + units;
+		return remainingCapacityUnits;
+	}
+
+	@Override
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id){
+		this.id = id;
+	}
+	
+
+	/**
+	 * Displays information about the pizza after the
+	 * instructions finished executing to the console.
+	 */
+	@Override
+	public void printSummary() {
+		StringBuilder str = new StringBuilder();
+		str.append("Pizza: ");
+		str.append("id=");
+		str.append(id);
+		str.append(", ");
+		str.append("diameter=");
+		str.append(diameter);
+		str.append(", ");
+		str.append("flavor=");
+		str.append(flavor);
+		str.append(", ");
+		str.append("rem_surf_area=");
+		str.append(remainingSurfaceArea);
+		System.out.println(str);
+		
+	}
+}
