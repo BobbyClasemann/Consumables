@@ -1,0 +1,118 @@
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class TextReader {
+	
+	/**
+	 * Reads a text file and calls executingInstructions
+	 * to execute the instructions given.
+	 * 
+	 * @param binReader the array list of Identifiables
+	 */
+	public void readTextFile(BinaryReader binReader){
+
+	 	String[] readIn = new String[2];
+	 	String line;
+	 	ArrayList<Identifiable> loadData = binReader.getArrayList();
+	 	int lineNum = 0; //line number counter
+
+	try{
+	 	File myFile = new File("consumption_instructions1.txt");
+	 	Scanner fileInput = new Scanner(myFile);
+
+		while(fileInput.hasNextLine()){
+			lineNum++; //increments as each line is read from text file
+			line = fileInput.nextLine();
+			readIn = line.split(",");
+
+			executingInstructions(readIn, lineNum,loadData);
+			
+			}//end while
+
+		fileInput.close();
+		
+ 		}catch(IOException ioe){
+ 			System.out.println(ioe.getMessage());
+			System.exit(1125);
+ 		}//end catch
+	}//end readTextFile
+	
+	/**
+	 * Reads instructions from a text file to execute the commands given.
+	 * Throws an OverConsumedException if too much is consumed.
+	 * 
+	 * @param readIn the String array with instructions
+	 * @param lineNum the line number in the text file
+	 * @param loadData the Identifiable array list
+	 */
+	public void executingInstructions(String[] readIn, int lineNum,
+						ArrayList<Identifiable> loadData){
+
+		StringBuilder str = new StringBuilder();
+		boolean found = true;
+		
+		
+		for(int index = 0; index < loadData.size(); index++){
+			//if the item is consumable and the id is found,
+			//call the consume method on that object
+			if(loadData.get(index).getId()  == Integer.parseInt(readIn[0])
+					&& loadData.get(index) instanceof Consumable){
+			try{
+				//casts the array list to a Consumable to 
+				//gain access to the consume method
+				((Consumable) loadData.get(index)).
+				consume(Integer.parseInt(readIn[1]));
+				//if there is enough to be consumed, 
+				//display how much is left after being consumed
+					str.append(lineNum);
+					str.append(" - ");
+					str.append(Integer.parseInt(readIn[0]));
+					str.append(" has ");
+					str.append(((Consumable) loadData.get(index)).
+							getRemainingCapacityUnits());
+					str.append(" remaining. ");
+					System.out.println(str);
+				
+				//if an over consumed exception is thrown, 
+				//display that none is left to consume
+			}catch(OverConsumedException oce){
+					str.append(lineNum);
+					str.append(" - ");
+					str.append(Integer.parseInt(readIn[0]));
+					str.append(" didn't have enough and is now empty.");
+					System.out.println(str);
+				}
+	
+				return;	//leave the loop if found
+			}//end if
+			
+			//if the id is found but not a Consumable object,
+			//display it's not consumable
+			else if(loadData.get(index).getId() == Integer.parseInt(readIn[0]) 
+				&& !(loadData.get(index) instanceof Consumable)) {
+		
+				str.append(lineNum);
+				str.append(" - ");
+				str.append(Integer.parseInt(readIn[0]));
+				str.append(" not consumable.");
+				System.out.println(str);
+				return;
+				
+			}//end else if
+		
+		}//end for
+		
+		found = false;	//didn't find the id
+		//if not found, display that it couldn't be found
+		if(!found){
+			str.append(lineNum);
+			str.append(" - ");
+			str.append(Integer.parseInt(readIn[0]));
+			str.append(" not found.\n");
+			System.out.print(str);
+		}
+		
+	}
+}
