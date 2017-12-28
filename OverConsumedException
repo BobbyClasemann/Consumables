@@ -1,0 +1,12 @@
+@SuppressWarnings("serial")
+public class OverConsumedException extends Exception {
+	
+	public OverConsumedException(){
+		super("Error: Total amount remaining is less than 0.");
+	}
+
+	public OverConsumedException(int totalAmount) {
+		super("Error: Negative amount remaining:" + totalAmount);
+	}
+
+}
