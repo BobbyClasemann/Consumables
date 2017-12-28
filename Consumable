@@ -1,0 +1,7 @@
+public interface Consumable{
+
+	public int consume(int amount) throws OverConsumedException;
+	public int getRemainingCapacity();
+	public String getRemainingCapacityUnits();
+	
+}
